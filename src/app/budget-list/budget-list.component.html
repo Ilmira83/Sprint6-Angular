@@ -11,8 +11,8 @@
     <header class="header">
       <h1>Get the best quality</h1>
     </header>
-    @for (service of services; track service.id) {
-    <form class="forms">
+    @for (service of services; track service.id; let i = $index) {
+    <div class="forms">
       <div class="me-5 ms-5" >
         <h2> {{service.title}} </h2>
         <p> {{service.description}} </p>
@@ -20,11 +20,16 @@
       <h2 > {{service.price}}$ </h2>
       <div class="form-check">
         <label class="form-check-label" >
-        <input class="form-check-input"  type="checkbox" value="{{service.price}}" (change)="onChange($event)">
+        <input class="form-check-input"  type="checkbox" value="{{service.price}}" (change)="onChange($event, i)">
         Add
         </label>
+        <div class="hidden" *ngIf="openPanel() && counter === i">
+          <app-panel></app-panel>
+        </div>
       </div> 
-    </form> 
+   
+    </div>   
+
   }
     <section class="price">
      <h3>Budget price: {{totalPrice}} $</h3>

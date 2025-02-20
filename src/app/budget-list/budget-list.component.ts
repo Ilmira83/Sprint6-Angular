@@ -1,13 +1,14 @@
-import { Component, Input, input } from '@angular/core';
+import { Component, Input, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Budget } from '../interface/budget';
 import {FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
+import { PanelComponent } from "../panel/panel.component";
 
 
 
 @Component({
   selector: 'app-budget-list',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, PanelComponent],
   templateUrl: './budget-list.component.html',
   styleUrl: './budget-list.component.css'
 })
@@ -18,6 +19,8 @@ export class BudgetListComponent {
   budgetForm: FormGroup;
   selectedPrices: any | null []= [];
   totalPrice = 0;
+  counter = -1;
+  openPanel = signal(false);
 
 
   constructor (private fb: FormBuilder) {
@@ -45,13 +48,22 @@ export class BudgetListComponent {
   calcTotal() {
     this.totalPrice = this.selectedPrices.value.reduce((sum: number, item: number) => sum + item, 0)
   }
+ 
+  isOpen(index: number) {
+    if(this.counter === index) {         
+      this.openPanel.set(!this.openPanel());
+      return
+    } else {
+      this.openPanel.set(true);
+      this.counter = index;
+    }
+  } 
 
 
-
-
-  onChange(e: any) {
+  onChange(e: any, index:number) {
     this.getPrices(e);
-    this.calcTotal()
+    this.calcTotal();
+    this.isOpen(index)
   }
 
 }

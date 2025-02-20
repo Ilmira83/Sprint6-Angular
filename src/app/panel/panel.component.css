@@ -1,6 +1,6 @@
 /* .container{
   position: relative;
-  .panel{
+  .hidden{
     width: auto;
     position: fixed;
     right: -410px;

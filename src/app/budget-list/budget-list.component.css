@@ -2,6 +2,7 @@
   display: grid;
   justify-content: center;
 }
+
 .header{
   display: flex;
   justify-content: center;
@@ -39,9 +40,20 @@ p{
   font-size: 15px;
 }
 .form-check{
+  position: relative;
   margin-right: 40px;
   margin-left: 40px;
+  .hidden{
+    width: auto;
+    position: inherit;
+
+ /*    top: 10px;
+    bottom: 100px;
+    &.open {
+      bottom: 0px;
+    } */
 }
+} 
 .price{
   display: flex;
   justify-content: end;

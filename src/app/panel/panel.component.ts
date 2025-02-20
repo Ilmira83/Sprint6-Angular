@@ -10,12 +10,27 @@ import { CommonModule } from '@angular/common';
 })
 
 export class PanelComponent {
+  pages:number = 0;
+  languages:number = 0;
 
-  showPanel = signal(false);
+  increasePages = () => this.pages+=1
   
-  showDetails = () => {
-    this.showPanel.set(true);
-  };
+  decreasePages = () => { if(this.pages > 0){
+      this.pages-=1
+    }
+  }
+
+  increaseLangs= () => this.languages+=1
+
+  decreaseLangs= () => { if(this.languages > 0) {
+      this.languages-=1
+    }
+  }
+
+
+
+
+
 
 }
 
