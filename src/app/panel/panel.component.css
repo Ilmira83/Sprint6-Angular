@@ -1,0 +1,19 @@
+/* .container{
+  position: relative;
+  .panel{
+    width: auto;
+    position: fixed;
+    right: -410px;
+    top: 100px;
+    &.open {
+      right: 100px;
+    }
+}
+} */
+
+button{
+  color: rgb(97, 82, 93);
+  background-color: beige;
+  border: none;
+  border-radius: 50%;
+}

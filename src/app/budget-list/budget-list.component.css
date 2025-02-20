@@ -1,0 +1,48 @@
+.container{
+  display: grid;
+  justify-content: center;
+}
+.header{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  width: auto;
+  margin-top: 20px;
+  background-image: url("/assets/navbar-bg.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+h1{
+  font-size: 40px;
+  color: rgb(21, 21, 72);
+}
+.forms{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 15px;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+h2{
+  margin-right: 10px;
+  font-size: 30px;
+}
+p{
+  margin-right: 10px;
+  margin-top: 10px;
+  font-size: 15px;
+}
+.form-check{
+  margin-right: 40px;
+  margin-left: 40px;
+}
+.price{
+  display: flex;
+  justify-content: end;
+}

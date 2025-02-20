@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+
+  <div class="container">
+    <header class="header">
+      <h1>Get the best quality</h1>
+    </header>
+    @for (service of services; track service.id) {
+    <form class="forms">
+      <div class="me-5 ms-5" >
+        <h2> {{service.title}} </h2>
+        <p> {{service.description}} </p>
+      </div>
+      <h2 > {{service.price}}$ </h2>
+      <div class="form-check">
+        <label class="form-check-label" >
+        <input class="form-check-input"  type="checkbox" value="{{service.price}}" (change)="onChange($event)">
+        Add
+        </label>
+      </div> 
+    </form> 
+  }
+    <section class="price">
+     <h3>Budget price: {{totalPrice}} $</h3>
+    </section>
+  </div>
+
+
+</body>
+</html>
+
+
