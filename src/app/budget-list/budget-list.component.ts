@@ -1,9 +1,8 @@
-import { Component, Input, signal } from '@angular/core';
+import { Component, computed, Input, signal} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Budget } from '../interface/budget';
 import {FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import { PanelComponent } from "../panel/panel.component";
-
 
 
 @Component({
@@ -18,10 +17,11 @@ export class BudgetListComponent {
   @Input() services: Budget[] = [];
   budgetForm: FormGroup;
   selectedPrices: any | null []= [];
-  totalPrice = 0;
+  totalPrice = signal<number>(0);
   counter = -1;
   openPanel = signal(false);
-
+  panelBudget = signal<number>(0); //output from panel component
+  panelBudgetArray: number[]= [];
 
   constructor (private fb: FormBuilder) {
     this.budgetForm = this.fb.group({
@@ -45,9 +45,14 @@ export class BudgetListComponent {
     }
   }
 
-  calcTotal() {
-    this.totalPrice = this.selectedPrices.value.reduce((sum: number, item: number) => sum + item, 0)
-  }
+  calcTotalPrice =() => this.totalPrice.set(this.selectedPrices.value.reduce((sum: number, item: number) => sum + item, 0)) 
+
+  passDataFromChild(panelData:number) {
+    this.panelBudgetArray.push(this.panelBudget());
+    this.panelBudget.set(panelData)
+  } 
+
+  finalBudget = computed(() => this.panelBudget() + this.totalPrice()) 
  
   isOpen(index: number) {
     if(this.counter === index) {         
@@ -58,12 +63,13 @@ export class BudgetListComponent {
       this.counter = index;
     }
   } 
-
+  
 
   onChange(e: any, index:number) {
     this.getPrices(e);
-    this.calcTotal();
+    this.calcTotalPrice();
     this.isOpen(index)
+    console.log(this.panelBudgetArray)
   }
 
 }
