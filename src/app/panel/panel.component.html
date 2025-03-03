@@ -1,19 +1,28 @@
-<ng-container>
-  @for (panel of panelArray; track panel; let i = $index) {
-  <section class="hidden">
-    <button type="button" class="info" (click)="showInfo($event, i)">ⓘ</button>
+<ng-container class="panel">
+   <section class="hidden">
+    <button type="button" class="info" (click)="showInfoPages($event)">ⓘ</button>
     <div class="panelInfo" *ngIf ="toggled===true">
       <app-notifications></app-notifications>
     </div>
-      <label >{{panel.title}} 
+      <label >Number of pages: 
         <div>
-          <button (click)="decrease(i)" >-</button>
-            <span class="panelInfo">{{panel.quantity}}</span>
-            <button (click)="increase(i)">+</button>
+          <button (click)="decreasePages()" >-</button>
+            <span class="panelInfo">{{pages()}}</span>
+            <button (click)="increasePages()">+</button>
         </div>
       </label>
+      <button type="button" class="info" (click)="showInfoLangs($event)">ⓘ</button>
+      <div class="panelInfo" *ngIf ="toggled===true">
+        <app-notifications></app-notifications>
+      </div>
+        <label >Number of languages: 
+          <div>
+            <button (click)="decreaseLangs()" >-</button>
+              <span class="panelInfo">{{langs()}}</span>
+              <button (click)="increaseLangs()">+</button>
+          </div>
+        </label>
   </section>
-  }
 </ng-container>
 
 

@@ -1,32 +1,44 @@
-import { Component, computed, Input, signal} from '@angular/core';
+import { Component, computed, effect, inject, Input, signal, ViewChild} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Budget } from '../interface/budget';
 import {FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import { PanelComponent } from "../panel/panel.component";
+import { BudgetSavedComponent } from "../budget-saved/budget-saved.component";
+import { BudgetService } from '../services/budget.service';
 
 
 @Component({
   selector: 'app-budget-list',
-  imports: [CommonModule, ReactiveFormsModule, PanelComponent],
+  imports: [CommonModule, ReactiveFormsModule, PanelComponent, BudgetSavedComponent],
   templateUrl: './budget-list.component.html',
   styleUrl: './budget-list.component.css'
 })
 
 
 export class BudgetListComponent {
+
+  private budgetService = inject(BudgetService);
+  pages = this.budgetService.pages
+  langs = this.budgetService.langs
+  finalBudget = this.budgetService.finalBudget
+
   @Input() services: Budget[] = [];
+  
   budgetForm: FormGroup;
   selectedPrices: any | null []= [];
-  totalPrice = signal<number>(0);
+  budgetPrice = signal<number>(0);
   counter = -1;
   openPanel = signal(false);
-  panelBudget = signal<number>(0); //output from panel component
-  panelBudgetArray: number[]= [];
+  panelPrice = signal<number>(0);
 
   constructor (private fb: FormBuilder) {
     this.budgetForm = this.fb.group({
     selectedPrices: this.fb.array([]),
-    })
+    });
+    effect(() => { 
+      this.getLastPanelPrice();
+      this.calcTotalPrice();
+    });
   }
 
   getPrices(e: any) {
@@ -45,15 +57,17 @@ export class BudgetListComponent {
     }
   }
 
-  calcTotalPrice =() => this.totalPrice.set(this.selectedPrices.value.reduce((sum: number, item: number) => sum + item, 0)) 
+  calcTotalPrice =() => this.budgetPrice.set(this.selectedPrices.value.reduce((sum: number, item: number) => sum + item, 0)) 
+    
+  clacFinalBudget = computed(() => {
+   const panelPrice = isNaN(this.panelPrice()) ? 0 : this.panelPrice();
+   const budgetPrice = isNaN(this.budgetPrice()) ? 0 : this.budgetPrice();
+    return panelPrice + budgetPrice}) 
 
-  passDataFromChild(panelData:number) {
-    this.panelBudgetArray.push(this.panelBudget());
-    this.panelBudget.set(panelData)
-  } 
+  getLastPanelPrice =() => this.panelPrice.set(this.finalBudget().at(-1)!)
 
-  finalBudget = computed(() => this.panelBudget() + this.totalPrice()) 
- 
+  resetValues=()=> this.budgetService.resetValues()
+
   isOpen(index: number) {
     if(this.counter === index) {         
       this.openPanel.set(!this.openPanel());
@@ -63,14 +77,12 @@ export class BudgetListComponent {
       this.counter = index;
     }
   } 
-  
 
   onChange(e: any, index:number) {
     this.getPrices(e);
-    this.calcTotalPrice();
     this.isOpen(index)
-    console.log(this.panelBudgetArray)
   }
+ 
 
 }
 

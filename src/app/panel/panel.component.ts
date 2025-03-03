@@ -1,7 +1,6 @@
-import { Component, HostListener, inject, output, signal } from '@angular/core';
+import { Component, effect, HostListener, inject, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InforalertService } from '../services/inforalert.service';
-import { Panel } from '../interface/budget';
 import { BudgetService } from '../services/budget.service';
 import { NotificationsComponent } from "../notifications/notifications.component";
 
@@ -15,50 +14,68 @@ import { NotificationsComponent } from "../notifications/notifications.component
 
 
 export class PanelComponent {
-
-  panelArray: Panel[] = [];
-  private panelData = inject(BudgetService);
   infoMess = inject(InforalertService);
 
-  panelPrice = signal<number>(0);
-  panelPriceArray: any | null []= [];
-  totPanelPrice: number = 0;
-  passPaneldata = output<number>();
+  private budgetService = inject(BudgetService);
+  pages = this.budgetService.pages
+  langs = this.budgetService.langs
+  panelPrice = this.budgetService.panelPrice;
+  finalBudget = this.budgetService.finalBudget;
+ /*  passPaneldata = output<number>(); */
   toggled:boolean = false;
 
   constructor(){
-    this.panelArray = this.panelData.getPanelData();
+    effect(() => { this.calcPrice(); 
+   /*    this.passDataToParent(); */
+    });
   }
-  
-  increase = (index:number) =>{ this.panelArray[index].quantity += 1;
-    this.onChange()
+
+  increasePages = () => this.pages.update(v => v+1);
+      
+  decreasePages = () => { 
+    if(this.pages() > 0) { this.pages.update(v=> v-1)}
   }
+
+  increaseLangs = () => this.langs.update(v => v+1);
+      
+  decreaseLangs = () => { 
+    if(this.langs() > 0) { this.langs.update(v=> v-1)} 
+  }
+
+  calcPrice=() =>{
+     this.budgetService.calcPanelPrice()
+
+   
+     this.saveToArray()
+
     
-  decrease = (index:number) => { 
-    if(this.panelArray[index].quantity > 0) {
-     this.panelArray[index].quantity-=1
-    }; 
-    this.onChange();
-  }
+  
+  } 
 
-  calcPrice=() => this.panelPrice.set(this.panelArray.reduce((acc, item) => acc * item.quantity, 1) * this.panelArray[0].price);
-
-  passDataToParent=()=>this.passPaneldata.emit(this.panelPrice())
-
+  saveToArray=() => this.budgetService.saveToArray();
+     
+  resetValues=()=> this.budgetService.resetValues()
+  
+  
+  
+ 
+  
+  /* passDataToParent=()=>this.passPaneldata.emit(this.panelPrice()) */
 
   isToggled(){
     this.toggled = !this.toggled
   }
- showInfo(event: MouseEvent, index:number){
+ showInfoPages(event: MouseEvent){
   event.stopPropagation();
-    if(index==0){
-      this.infoMess.showInfo('Choose how many pages you want for your APP. Each page costs 30$.')
-    } else {
-      this.infoMess.showInfo('Choose languages for your APP. Each language costs 30$.')
-    }
+    this.infoMess.showInfo('Choose how many pages you want for your APP. Each page costs 30$.')
     this.isToggled()
   }
-
+  showInfoLangs(event: MouseEvent){
+    event.stopPropagation();
+      this.infoMess.showInfo('Choose languages for your APP. Each language costs 30$.')
+      this.isToggled()
+  }
+ 
   @HostListener('window:click', ['$event'])
   closeInfo(event: MouseEvent) {
     
@@ -66,12 +83,6 @@ export class PanelComponent {
       this.toggled = false;
   }}
    
-  onChange(){
-    this.calcPrice();
-    this.passDataToParent()
-  }
-  
-
 }
 
   

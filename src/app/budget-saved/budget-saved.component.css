@@ -1,0 +1,19 @@
+
+.form-group{
+  display: grid;
+  height: 250px;
+  width: 600px;
+  align-items: baseline;
+  justify-content: center;
+  border-radius: 15px;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+.inputs{
+  display: inline;
+  justify-content: ;
+  margin: 5px
+}

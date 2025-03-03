@@ -1,0 +1,17 @@
+
+  <form class="form-group" [formGroup] ="savedBdgtForm">
+    <div class="header">
+      <h1 class="fs-4">Request your budget</h1>
+    </div>
+    <div class="input-group-conteiner inputs" >
+      <input type="text" class="form-control-sm" placeholder="Name" formControlName="name">
+      <p *ngIf="savedBdgtForm.get('name')?.errors?.['required']">Need to write your name</p>
+      <input type="text" class="form-control-sm" placeholder="Telephone" formControlName="phone">
+      <p *ngIf="savedBdgtForm.get('phone')?.errors?.['required']">Need to write your phone number correctly</p>
+      <input type="text" class="form-control-sm" placeholder="E-mail" formControlName="email">
+      <p *ngIf="savedBdgtForm.get('phone')?.errors?.['required']">Need to write your e-mail correctly</p>
+      <button type="button" class="btn btn-success ms-2" (click)="saveBudget()">Send request</button>
+    </div>
+  </form>
+
+

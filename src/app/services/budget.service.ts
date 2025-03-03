@@ -1,11 +1,33 @@
-import { Injectable } from '@angular/core';
-import { Budget } from '../interface/budget';
-import { Panel } from '../interface/budget';
+import { computed, Injectable, signal } from '@angular/core';
+import { Budget, savedBudgets } from '../interface/budget';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class BudgetService {
+
+  pages = signal<number>(0);
+  langs = signal<number>(0);
+  panelPrice = signal<number>(0);
+  finalBudget = signal<number[]>([]);
+
+  calcPanelPrice=() => this.panelPrice.set(this.pages() * this.langs() * 30)
+
+  saveToArray=() => this.finalBudget.update((v) => [...v, this.panelPrice()]);
+
+  resetValues() {
+    this.pages.set(0);
+    this.langs.set(0);
+    this.panelPrice.set(0);
+  }
+
+
+
+  savedServices = signal<savedBudgets[]>([]);
+
+  
+ 
 
   getServices(): Budget[] {
     return [
@@ -28,20 +50,8 @@ export class BudgetService {
 
     
     }
-  getPanelData(): Panel[] {
-    return [
-      {
-        title: 'Number of pages:',
-        quantity: 0,
-        price: 30
-      },
-      {
-        title: 'Number of languages:',
-        quantity: 0,
-        price: 30
-      }
-    ]
-  }
+  
+
 
   
 

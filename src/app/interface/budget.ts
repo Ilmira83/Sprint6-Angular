@@ -1,11 +1,15 @@
+import { EmailValidator } from "@angular/forms";
+
 export interface Budget {
   id: number;
   title: string;
   description: string;
   price: number;
 }
-export interface Panel {
-  title: string;
-  quantity: number;
-  price: number
+export interface savedBudgets{
+  name: string;
+  email: string;
+  phone: number;
+  sevice: Budget[];
+  totPrice: number
 }
