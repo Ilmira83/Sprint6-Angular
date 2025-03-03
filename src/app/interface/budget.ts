@@ -10,6 +10,6 @@ export interface savedBudgets{
   name: string;
   email: string;
   phone: number;
-  sevice: Budget[];
+  service: string[];
   totPrice: number
 }

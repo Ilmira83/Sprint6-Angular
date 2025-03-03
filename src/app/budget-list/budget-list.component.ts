@@ -21,6 +21,8 @@ export class BudgetListComponent {
   pages = this.budgetService.pages
   langs = this.budgetService.langs
   finalBudget = this.budgetService.finalBudget
+  savedServices = this.budgetService.savedServices
+  totalPrice = this.budgetService.totalPrice
 
   @Input() services: Budget[] = [];
   
@@ -30,6 +32,7 @@ export class BudgetListComponent {
   counter = -1;
   openPanel = signal(false);
   panelPrice = signal<number>(0);
+  
 
   constructor (private fb: FormBuilder) {
     this.budgetForm = this.fb.group({
@@ -38,6 +41,7 @@ export class BudgetListComponent {
     effect(() => { 
       this.getLastPanelPrice();
       this.calcTotalPrice();
+      this.totalPrice.set(this.clacFinalBudget())
     });
   }
 
@@ -56,13 +60,22 @@ export class BudgetListComponent {
       });
     }
   }
+  addServices(index:number, e: any) {
+    this.selectedPrices = this.budgetForm.get('selectedPrices') as FormArray;
+    if(e.target.checked) {
+      this.savedServices.update(v => [...v, this.services[index].title]);
+    } else {
+      this.savedServices.update(v => v.filter(v => v !== this.services[index].title));
+    }
+  }
 
-  calcTotalPrice =() => this.budgetPrice.set(this.selectedPrices.value.reduce((sum: number, item: number) => sum + item, 0)) 
+  calcTotalPrice =() => this.budgetPrice.set(this.selectedPrices.value?.reduce((sum: number, item: number) => sum + item, 0)) 
     
   clacFinalBudget = computed(() => {
-   const panelPrice = isNaN(this.panelPrice()) ? 0 : this.panelPrice();
-   const budgetPrice = isNaN(this.budgetPrice()) ? 0 : this.budgetPrice();
-    return panelPrice + budgetPrice}) 
+    const panelPrice = isNaN(this.panelPrice()) ? 0 : this.panelPrice();
+    const budgetPrice = isNaN(this.budgetPrice()) ? 0 : this.budgetPrice();
+    return panelPrice + budgetPrice;
+  }) 
 
   getLastPanelPrice =() => this.panelPrice.set(this.finalBudget().at(-1)!)
 
@@ -81,6 +94,7 @@ export class BudgetListComponent {
   onChange(e: any, index:number) {
     this.getPrices(e);
     this.isOpen(index)
+    this.addServices(index, e)
   }
  
 

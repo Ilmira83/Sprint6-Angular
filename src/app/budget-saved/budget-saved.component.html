@@ -1,5 +1,5 @@
 
-  <form class="form-group" [formGroup] ="savedBdgtForm">
+  <section class="form-group" [formGroup] ="savedBdgtForm">
     <div class="header">
       <h1 class="fs-4">Request your budget</h1>
     </div>
@@ -10,8 +10,40 @@
       <p *ngIf="savedBdgtForm.get('phone')?.errors?.['required']">Need to write your phone number correctly</p>
       <input type="text" class="form-control-sm" placeholder="E-mail" formControlName="email">
       <p *ngIf="savedBdgtForm.get('phone')?.errors?.['required']">Need to write your e-mail correctly</p>
-      <button type="button" class="btn btn-success ms-2" (click)="saveBudget()">Send request</button>
+      <button type="button" class="btn btn-success ms-2" (click)="sendData()">Send request</button>
     </div>
-  </form>
+
+  </section>
+  <section *ngIf= "dataSent===true">
+       @for(userService of allSavedBudgets(); track userService; let i = $index){
+      <div class="savedInfo d-flex border-5 rounded-bottom-1">
+        <div class="d-grid me-5">
+           <h2>
+          {{userService.name}}
+          </h2>
+          <p>
+          {{userService.email}}
+        </p>
+          <p>
+            {{userService.phone}}
+          </p>
+        </div>
+       <div class="d-grid me-5">
+        <h3>Saved services</h3>
+        <h5>{{userService.service}}</h5>
+       </div>
+       <div class="d-grid">
+        <h3>TotalPrice</h3>
+        <h4>{{userService.totPrice}}</h4>
+       </div>
+
+        
+      </div>
+
+    }
+  </section>
+ 
+
+
 
 

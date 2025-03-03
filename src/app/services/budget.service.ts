@@ -7,10 +7,17 @@ import { Budget, savedBudgets } from '../interface/budget';
 })
 export class BudgetService {
 
+
   pages = signal<number>(0);
   langs = signal<number>(0);
   panelPrice = signal<number>(0);
   finalBudget = signal<number[]>([]);
+  totalPrice = signal<number>(0)
+  savedServices = signal<string[]>([]);
+  name = signal<string>('')
+  email = signal<string>('')
+  nPhone = signal<number>(0)
+  allSavedBudgets = signal<savedBudgets[]>([])
 
   calcPanelPrice=() => this.panelPrice.set(this.pages() * this.langs() * 30)
 
@@ -22,12 +29,20 @@ export class BudgetService {
     this.panelPrice.set(0);
   }
 
-
-
-  savedServices = signal<savedBudgets[]>([]);
-
+  getSavedServices():savedBudgets[] {
+    return [
+      { name: this.name(),
+        email: this.email(),
+        phone: this.nPhone(),
+        service: this.savedServices(),
+        totPrice: this.totalPrice()
+      },
+    ]
+  }
   
- 
+  getTotalSavedServices(){
+    this.allSavedBudgets.update(v=> [...v, ...this.getSavedServices()])
+  }
 
   getServices(): Budget[] {
     return [
